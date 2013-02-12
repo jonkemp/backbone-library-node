@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+      <meta charset="utf-8"/>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+      <title>Backbone.js Library</title>
+      <meta name="description" content=""/>
+      <meta name="viewport" content="width=device-width"/>
+      <link rel="stylesheet" href="styles/main.css"/>
+      <link rel="stylesheet" href="styles/smoothness/jquery-ui-1.10.0.custom.css"/>
+
+    </head>
+    <body>
+        <div id="books">
+            <form id="addBook" action="#">
+              <div>
+                <label for="coverImage">CoverImage: </label><input id="coverImage" type="file" />
+                <label for="title">Title: </label><input id="title" type="text" />
+                <label for="author">Author: </label><input id="author" type="text" />
+                <label for="releaseDate">Release date: </label><input id="releaseDate" type="text" />
+                <label for="keywords">Keywords: </label><input id="keywords" type="text" />
+                <button id="add">Add</button>
+              </div>
+            </form>
+
+            <script id="bookTemplate" type="text/template">
+              <img src="<%= coverImage %>"/>
+              <ul>
+                <li><%= title %></li>
+                <li><%= author %></li>
+                <li><%= $.format.date(new Date(releaseDate), 'dd/MM/yyyy') %></li>
+                <li><% _.each(keywords, function(keyobj){%> <%= keyobj.keyword %><% }); %></li>
+              </ul>
+
+              <button class="delete">Delete</button>
+            </script>
+        </div>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <!-- Add your site or application content here -->
+
+        <!-- build:js scripts/scripts.js -->
+        <script src="scripts/vendor/jquery.min.js"></script>
+        <script src="scripts/vendor/jquery-ui-1.10.0.custom.min.js"></script>
+        <script src="scripts/vendor/jquery.dateFormat-1.0.js"></script>
+        <script src="scripts/vendor/lodash.min.js"></script>
+        <script src="scripts/vendor/backbone-min.js"></script>
+        <script src="scripts/main.js"></script>
+        <!--<script src="scripts/views/application-view.js"></script>
+        <script src="scripts/models/application-model.js"></script>
+        <script src="scripts/collections/application-collection.js"></script>
+        <script src="scripts/routes/application-router.js"></script>-->
+        <!-- endbuild -->
+
+    </body>
+</html>
