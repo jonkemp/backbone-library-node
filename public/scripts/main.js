@@ -10,7 +10,7 @@
         keywords:"None"
       },
       parse:function (response) {
-        console.log(response);
+        //console.log(response);
         response.id = response._id;
         return response;
       }
@@ -54,9 +54,9 @@
       },
 
       initialize:function(){
-        //this.collection = new Library(books);
         this.collection = new Library();
         this.collection.fetch();
+        console.log(this.collection);
         this.render();
 
         this.collection.on("add", this.renderBook, this);
@@ -78,31 +78,28 @@
           this.$el.append(bookView.render().el);
       },
 
-      addBook:function(e){
-        e.preventDefault();
+      addBook: function( e ) {
+          e.preventDefault();
 
-        var formData = {};
+          var formData = {};
 
-        $("#addBook div").children("input").each(function(i, el){
-          if ($(el).val() !== "") {
-            if (el.id === 'keywords') {
-              var keywordArray = $(el).val().split(',');
-              var keywordObjects = [];
-              for (var j = 0; j < keywordArray.length; j++) {
-                keywordObjects[j] = {"keyword":keywordArray[j]};
+          $( '#addBook div' ).children( 'input' ).each( function( i, el ) {
+              if( $( el ).val() != '' )
+              {
+                  if( el.id === 'keywords' ) {
+                      formData[ el.id ] = [];
+                      _.each( $( el ).val().split( ' ' ), function( keyword ) {
+                          formData[ el.id ].push({ 'keyword': keyword });
+                      });
+                  } else if( el.id === 'releaseDate' ) {
+                      formData[ el.id ] = $( '#releaseDate' ).datepicker( 'getDate' ).getTime();
+                  } else {
+                      formData[ el.id ] = $( el ).val();
+                  }
               }
-              formData[el.id] = keywordObjects;
-            } else if (el.id === 'releaseDate'){
-              formData[el.id] = $('#releaseDate').datepicker("getDate").getTime();
-            } else {
-              formData[el.id] = $(el).val();
-            }
-          }
-        });
+          });
 
-        books.push(formData);
-
-        this.collection.create(formData);
+          this.collection.create( formData );
       },
 
       removeBook:function(removedBook){
