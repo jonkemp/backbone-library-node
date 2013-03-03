@@ -1,8 +1,8 @@
 // Module dependencies.
 var application_root = __dirname,
-  express = require("express"), //Web framework
-  path = require("path"), //Utilities for dealing with file paths
-  mongoose = require('mongoose'); //MongoDB integration
+    express = require( 'express' ), //Web framework
+    path = require( 'path' ), //Utilities for dealing with file paths
+    mongoose = require( 'mongoose' ); //MongoDB integration
 
 //Create server
 var app = express();
@@ -19,7 +19,7 @@ app.configure( function() {
     app.use( app.router );
 
     //Where to serve static content
-    app.use( express.static( path.join( application_root, 'site') ) );
+    app.use( express.static( path.join( application_root, 'public') ) );
 
     //Show all errors in development
     app.use( express.errorHandler({ dumpExceptions: true, showStack: true }));
@@ -40,10 +40,15 @@ app.get( '/api', function( request, response ) {
 mongoose.connect( 'mongodb://localhost/library_database' );
 
 //Schemas
+var Keywords = new mongoose.Schema({
+    keyword: String
+});
+
 var Book = new mongoose.Schema({
     title: String,
     author: String,
-    releaseDate: Date
+    releaseDate: Date,
+    keywords: [ Keywords ]
 });
 
 //Models
@@ -78,6 +83,17 @@ app.post( '/api/books', function( request, response ) {
     return response.send( book );
 });
 
+//Get a single book by id
+app.get( '/api/books/:id', function( request, response ) {
+    return BookModel.findById( request.params.id, function( err, book ) {
+        if( !err ) {
+            return response.send( book );
+        } else {
+            return console.log( err );
+        }
+    });
+});
+
 //Update a book
 app.put( '/api/books/:id', function( request, response ) {
     console.log( 'Updating book ' + request.body.title );
@@ -98,17 +114,6 @@ app.put( '/api/books/:id', function( request, response ) {
     });
 });
 
-//Get a single book by id
-app.get( '/api/books/:id', function( request, response ) {
-    return BookModel.findById( request.params.id, function( err, book ) {
-        if( !err ) {
-            return response.send( book );
-        } else {
-            return console.log( err );
-        }
-    });
-});
-
 //Delete a book
 app.delete( '/api/books/:id', function( request, response ) {
     console.log( 'Deleting book with id: ' + request.params.id );
@@ -122,16 +127,4 @@ app.delete( '/api/books/:id', function( request, response ) {
             }
         });
     });
-});
-
-//Schemas
-var Keywords = new mongoose.Schema({
-    keyword: String
-});
-
-var Book = new mongoose.Schema({
-    title: String,
-    author: String,
-    releaseDate: Date,
-    keywords: [ Keywords ]
 });
